@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-xs-12">
+<div class="thumbnail" style="margin-bottom: 10px;">
+    <div style="text-align: center;margin-bottom:10px;">
+        <span style="font-size:15px;font-weight: bold">{{ produto.nome }} </span><span>({{ produto.valor | currency : 'BRL' : true }})</span>
+    </div>
+    <img [src]="produto.imagem" alt="..." style="width:152px; height:152px;">
+    <div style="font-size:20px; color:#449d44; text-align: center; margin-top: 8px;">
+        <span class="glyphicon glyphicon-pencil" style="cursor:pointer; margin:5px" title="Editar Produto" data-toggle="modal" data-target="#myModal" (click)="alterarProduto()"></span>
+        <span data-toggle="modal" data-target="#modalExcluirProduto" class="glyphicon glyphicon-trash" style="cursor:pointer; margin:5px" title="Exluir Produto"></span>
+        <span (click)="enviarParaLista()" class="glyphicon glyphicon-hand-right" style="cursor:pointer; margin:5px" title="Adicionar na sua lista"></span>
+    </div>
+    </div>
+</div>
+</div>
+<section class="col-md-12">
+    <div class="modal fade" id="modalExcluirProduto" tabindex="-1" role="dialog" aria-labelledby="modalExlusao">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                 <div class="modal-header">
+                <label class="glyphicon glyphicon-remove" style="font-size:20px; cursor:pointer; float:right" title="Cancelar">
+                        <button  type="button" class="close" data-dismiss="modal" aria-label="Close" style="display:none"></button>
+                    </label>
+                <h4 class="modal-title">Exclusão de Produto</h4>
+            </div>
+                <div class="modal-body">
+                    Deseja Realmente remover o produto ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" (click)="excluirProduto()">Exluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,116 @@
+<div style="margin-top:10px" class="col-xs-12">
+    <select [(ngModel)]="listaSelec" (ngModelChange)="buscaProdutosDaLista()" class="btn btn-info dropdown-toggle col-xs-9" style="height:45px;text-align:center;font-size:18px;display:block;margin-bottom:10px">
+    <option *ngFor="let listaSelec of listas" [ngValue]="listaSelec">
+      {{listaSelec.nome}}
+    </option>
+  </select>
+  <span (click)="openModalLista(listaSelec ? 'Alteração de Lista' : 'Cadastramento de Lista')" class="glyphicon glyphicon-plus-sign" data-toggle="modal" data-target="#listaModal"
+         style="font-size:18px; font-size: 41px; margin-left: 15px; color: #5bc0de;cursor:pointer;" 
+         title="Adicionar uma nova lista">
+  </span>
+  <span [class.disabled]="!listaSelec" (click)="openModalLista(listaSelec ? 'Alteração de Lista' : 'Cadastramento de Lista')" class="glyphicon glyphicon-erase" data-toggle="modal" data-target="#modalExcluirLista"
+         style="font-size:18px; font-size: 41px; margin-left: 15px; color: #5bc0de; cursor:pointer;" 
+         title="Remover lista atual" *ngIf="listaSelec">
+  </span>
+</div>
+        <div *ngFor="let produto of listaSelec.produtos" class="thumbnail col-xs-2" style="margin:14px" >
+            <div [ngClass]="getClassSeJaPegou(produto.jaPegou)">
+                <span style="text-align: center;font-size:18px;font-weight: bold; margin-bottom:5px" class="col-xs-12">
+                    {{ produto.nome }}
+                </span>
+                <span (click)="removerProdutoDaLista(produto)" class="glyphicon glyphicon-remove"  *ngIf="!produto.jaPegou"
+                style="margin:5px; margin-top:-20px;     float: right; cursor:pointer;" title="Remover produto da sua lista"></span>
+            </div>
+
+            <div [ngClass]="getClassSeJaPegou(produto.jaPegou)" style="text-align:center">
+                <img [src]="produto.imagem" style="width:152px; height:152px;" [alt]="produto.nome">
+            </div>
+            <div [ngClass]="getClassSeJaPegou(produto.jaPegou)" style="text-align:center">
+                Valor Unitario : {{ produto.valor | currency : 'BRL' : true }}
+            </div>
+            <div  [ngClass]="getClassSeJaPegou(produto.jaPegou)" style="text-align:center">
+                Total : {{ produto.quantidade * produto.valor | currency : 'BRL' : true }}
+            </div>
+
+                <div [ngClass]="getClassSeJaPegou(produto.jaPegou)" style="text-align:left;display:block;text-align: center;" *ngIf="!produto.jaPegou">
+                    <a (click)="listaSelec.diminuirQuantidade(produto)" >
+                      <span class="glyphicon glyphicon-minus" style="font-size: 18px;color: black;cursor:pointer;"></span>
+                    </a>
+                    <input type="number" [(ngModel)]="produto.quantidade" readonly="true" style="text-align: center;width:30px;margin-right:5px;margin-left:10px" min="0"/>
+                    <a (click)="listaSelec.aumentarQuantidade(produto)" >
+                      <span class="glyphicon glyphicon-plus" style="font-size: 18px;margin:5px;color: black; cursor:pointer;"></span>
+                    </a>
+                </div>
+
+          <div style="font-size:30px; color:black; text-align: center;display:-block; margin-top: 5px;" >
+              <span *ngIf="!produto.jaPegou" class="glyphicon glyphicon-shopping-cart " style="cursor:pointer;" title="Coloquei no carrinho" (click)="listaSelec.pegarProduto(produto)"></span>
+              <span *ngIf="produto.jaPegou" (click)="listaSelec.devolverProduto(produto)" class="glyphicon glyphicon-ban-circle" style="cursor:pointer;" title="Ops, nao tenho certeza se vou pegar mesmo"></span>
+          </div>
+        </div>
+<section style="position: fixed; bottom: 0px; margin: 3px;background: #515151; color:white; margin-left: -44px; font-size:16px; width:100%;height:50px; padding: 15px;" class="col-xs-12; ">
+    <div class="col-md-4" style="text-align:left">
+        Qtd Restante de Itens a pegar:
+    </div>
+    <div class="col-md-4" style="text-align:left">
+        Valor Estimado: {{ listaSelec.estimado | currency : 'BRL' : true }}
+    </div>
+    <div class="col-md-4" style="text-align:left">
+        Valor Total: {{ listaSelec.total | currency : 'BRL' : true }}
+    </div>
+</section>
+<div class="modal fade" id="listaModal" tabindex="-1" role="dialog" aria-labelledby="listaModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label class="glyphicon glyphicon-remove" style="font-size:20px; cursor:pointer; float:right" title="Cancelar">
+                        <button  type="button" class="close" data-dismiss="modal" aria-label="Close" style="display:none"></button>
+                    </label>
+                <h4 class="modal-title">{{titleModal}}</h4>
+            </div>
+                <div style="margin-bottom:20px;" class="col-xs-12">
+                    <form (ngSubmit)="onSubmit()" #listaForm="ngForm" novalidate>
+                        <div class="form-group has-danger" [ngClass]="getFormGroupClass(nome.valid, nome.pristine)" class="col-xs-12">
+                            <label for="nome" class="form-control-label">Nome</label>
+                            <input type="text" required [ngClass]="getFormControlClass(nome.valid,nome.pristine)" name="nome" placeholder="Insira o nome da Lista" [(ngModel)]="listaCad.nome" #nome="ngModel">
+                        </div>
+                        <div class="col-xs-12">
+                          <button type="submit" class="btn btn-primary" style="float:right;margin-top:20px" [disabled]="!listaForm.form.valid">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            <div class="modal-footer" style="clear:both">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalResponseLista" tabindex="-1" role="dialog" aria-labelledby="modalResponseListaLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label class="glyphicon glyphicon-ok" style="font-size:20px; cursor:pointer; float:right" title="Cancelar">
+                        <button  type="button" class="close" data-dismiss="modal" aria-label="Close" style="display:none"></button>
+                    </label>
+                <h4 class="modal-title">{{msgResponse}}</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalExcluirLista" tabindex="-1" role="dialog" aria-labelledby="modalExlusaoLista">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                 <div class="modal-header">
+                <label class="glyphicon glyphicon-remove" style="font-size:20px; cursor:pointer; float:right" title="Cancelar">
+                        <button  type="button" class="close" data-dismiss="modal" aria-label="Close" style="display:none"></button>
+                    </label>
+                <h4 class="modal-title">Exclusão de Lista</h4>
+            </div>
+                <div class="modal-body">
+                    Deseja Realmente remover a lista ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" (click)="excluirLista()">Exluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
