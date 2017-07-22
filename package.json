@@ -14,7 +14,7 @@
   },
   "private": true,
   "dependencies": {
-     "ejs": "2.5.6",
+    "ejs": "2.5.6",
     "express": "4.15.2",
     "@angular/common": "^2.3.1",
     "@angular/compiler": "^2.3.1",
@@ -24,7 +24,6 @@
     "@angular/platform-browser": "^2.3.1",
     "@angular/platform-browser-dynamic": "^2.3.1",
     "@angular/router": "^3.3.1",
-    "aws-sdk": "^2.87.0",
     "bootstrap": "^3.3.6",
     "core-js": "^2.4.1",
     "gzippo": "^0.2.0",

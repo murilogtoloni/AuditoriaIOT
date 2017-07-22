@@ -1,0 +1,13 @@
+.myLiveChat{
+    resize: none;
+    width: 600px;
+    height: 200px;
+    writing-mode: false;
+}
+
+.boxed {
+  border: 2px solid black ;
+  width: 600px;
+  height: 300px;
+  display: inline;
+}

@@ -1,76 +1,22 @@
-<section class="col-md-2">
-    <div style="margin-top:10px;">
-        <button style="height: 45px; font-size: 18px;margin-bottom:12px;" class="btn btn-success col-xs-12" (click)="openModalProduto('Cadastre um novo produto', null)" type="button" 
-            data-toggle="modal" data-target="#myModal">Novo Produto</button>
-    </div>
-    <div class="input-group col-xs-12" style="">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-        <input type="search" #busca (input)="buscarProduto(busca.value)" class="form-control" placeholder="Busque um produto" aria-describedby="basic-addon1">
-    </div>
-    <div style="overflow-x:hidden;position: relative;">
-        <div *ngFor="let prod of produtos">
-            <app-item-produto [produto]="prod" *ngIf="prod.noFiltro" 
-                (eventAdicionar)="appLista.gravaProdutoNaLista($event.produto)" 
-                (eventAlterar)="openModalProduto('Alteração do produto', $event.produto)"
-                (eventExcluir)="excluiProduto($event.produto.id)"></app-item-produto>
-        </div>
-    </div>
-</section>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label class="glyphicon glyphicon-remove" style="font-size:20px; cursor:pointer; float:right" title="Cancelar">
-                        <button  type="button" class="close" data-dismiss="modal" aria-label="Close" style="display:none"></button>
-                    </label>
-                <h4 class="modal-title" id="myModalLabel">{{titleModal}}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="col-xs-4">
-                    <label class="glyphicon glyphicon-camera" style="font-size:20px; cursor:pointer" title="Carregue uma imagem para esse produto">
-                        <input type="file" (change)="fileEvent($event)" style="display:none" />
-                    </label>
-                    <div style="margin-bottom:20px;border: 1px solid rgba(128, 128, 128, 0.23); width:160px; height:180px;padding:4px">
-                        <img [src]="urlImgUpload.Location" *ngIf="urlImgUpload" style="width:150px; height:170px;">
-                    </div>
-                </div>
-                <div style="margin-bottom:20px;" class="col-xs-8">
-                    <form (ngSubmit)="onSubmit()" #produtoForm="ngForm" novalidate>
-                        <div class="form-group has-danger" [ngClass]="getFormGroupClass(nome.valid, nome.pristine)" class="col-xs-12">
-                            <label for="nome" class="form-control-label">Nome</label>
-                            <input type="text" required [ngClass]="getFormControlClass(nome.valid,nome.pristine)" name="nome" placeholder="Insira o nome do Produto" [(ngModel)]="produtoCad.nome" #nome="ngModel">
-                        </div>
-                        <div class="form-group has-danger" [ngClass]="getFormGroupClass(nome.valid, nome.pristine)" class="col-xs-12">
-                            <label for="valor" class="form-control-label">Preço</label>
-                            <input type="number" min="0.00" max="10000.00" step="0.01" required [ngClass]="getFormControlClass(valor.valid,valor.pristine)" name="valor" placeholder="" [(ngModel)]="produtoCad.valor" #valor="ngModel">
-                        </div>
-                        <div class="col-xs-12">
-                        <button type="submit" class="btn btn-primary" style="float:right;margin-top:20px" [disabled]="!produtoForm.form.valid || !urlImgUpload">Salvar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer" style="clear:both">
-            </div>
-        </div>
-    </div>
+<app-nav-bar></app-nav-bar>
+
+<div class="text-center" *ngIf="isLiveActive">
+    <app-video-stream-frame></app-video-stream-frame>
+    <app-live-chat></app-live-chat>
+    
+    
 </div>
 
-<div class="modal fade" id="modalResponse" tabindex="-1" role="dialog" aria-labelledby="modalResponseLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label class="glyphicon glyphicon-ok" style="font-size:20px; cursor:pointer; float:right" title="Cancelar">
-                        <button  type="button" class="close" data-dismiss="modal" aria-label="Close" style="display:none"></button>
-                    </label>
-                <h4 class="modal-title" id="modalResponsesLabel">{{msgResponse}}</h4>
+<div *ngIf="!isLiveActive">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="text-center">
+                <h2>Não há auditorias ativas nesse momento</h2>
+            <button class="btn btn-primary" (click)="startStream()"> Iniciar Auditoria</button>
             </div>
         </div>
     </div>
-</div>
 
-<section class="col-md-10" style="max-height:600px">
-    <app-lista class="col-md-12" #appLista
-        (eventAtualizarProdutos)="consultaProdutosNaoCadastrados($event.idLista)"></app-lista>
-</section>
+
+
+</div>
